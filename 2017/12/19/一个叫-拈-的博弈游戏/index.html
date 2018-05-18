@@ -1,0 +1,422 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.40.3" />
+
+
+<title>一个叫 “拈” 的博弈游戏 - nyakokishi&#39;s blog</title>
+<meta property="og:title" content="一个叫 “拈” 的博弈游戏 - nyakokishi&#39;s blog">
+
+
+
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="http://nyakokishi.github.io/css/main.css" media="all">
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Merriweather:400|Lato:400,400italic,700">
+<link rel="shortcut icon" type="image/ico" href="/favicon.ico"/>
+
+
+    <script src="http://nyakokishi.github.io/js/highlight.js/9.7.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="http://nyakokishi.github.io/css/highlight.js/9.7.0/styles/github.min.css">
+    <script>hljs.initHighlightingOnLoad();</script>
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="http://nyakokishi.github.io/" class="nav-logo"><img src="http://nyakokishi.github.io/images/logo.jpg" width="50" height="50"></a>
+
+  <div class="nav-title-container">
+    <span class="nav-title">nyakokishi</span>
+    <span class="nav-subtitle">弱哭了 (༎ຶ ‿ ༎ຶ )</span>
+ </div>
+
+
+  <ul class="nav-links">
+    
+    <li><a href="/">Home</a></li>
+    
+    <li><a href="/about">About</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">7 min read</span>
+    
+
+    <h1 class="article-title">一个叫 “拈” 的博弈游戏</h1>
+
+    
+    <span class="article-date">December 12, 2017</span>
+    
+
+    <div class="article-content">
+      
+
+<h2 id="前言">前言</h2>
+
+<p>最近在公司活动中玩了一个博弈游戏，游戏规则比较简单，但其必胜策略却十分耐人寻味，游戏内容就是有三堆物件，数量分别为 $3, 5, 7$ 个，两位玩家轮流从这三堆物件中取物，每次取物只能在三堆物品中选择其中一堆并至少取走一个，可以直接一堆取完，当所有堆都取完时游戏随即结束并且最后取完的玩家判为输。
+这个游戏其实是一个叫 Nim 博弈游戏的一种变种玩法，Nim 游戏通常的玩法如下:</p>
+
+<blockquote>
+<p>The normal game is between two players and played with three heaps of any number of objects. The two players alternate taking any number of objects from any single one of the heaps. The goal is to be the last to take an object. <a href="https://en.wikipedia.org/wiki/Nim#Game_play_and_illustration">#wiki</a></p>
+</blockquote>
+
+<p>通常 Nim 游戏的获胜目标是争取成为最后一个取完的玩家，如果反着来，最后一个取完的玩家判为输，则是 Nim 游戏的一种变形，暂且称为 Anti-Nim (部分资料的说法)。</p>
+
+<p>据了解这个游戏源自中国，后由到美洲打工的华人外传，之所以称为 Nim 有个说法称是由粤语的“拈”音译而得，Nim 游戏后来也演化出多个版本的玩法，它的必胜策略直到 20 世纪初才由一个叫 <a href="https://en.wikipedia.org/wiki/Charles_L._Bouton">Charles L. Bouton</a> 的数学家在他的一篇论文中给出。论文传送门：<a href="http://www.jstor.org/stable/1967631?origin=crossref&amp;seq=1#page_scan_tab_contents">Nim, A Game with a Complete Mathematical Theory</a></p>
+
+<h2 id="nim-game">Nim Game</h2>
+
+<h3 id="分析">分析</h3>
+
+<p>首先尝试分析 Nim 游戏的规律，以取石子为例，假定 $w$ 为石子的总数 $(w \ge 1)$，这些石子被分为 $n$ 堆$(n \ge 1)$，局面状态以 $(x_1, x_2, \ldots,x_n)$ 进行表示:</p>
+
+<ol>
+<li>当 $n = 1$ 同时 $w = 1$ 时，显然先手胜；</li>
+
+<li><p>当 $n = 2$ 时，可以分为四种情况进行讨论</p>
+
+<p><strong>①</strong> $(1, 1)$ 局面，显然先手败；</p>
+
+<p><strong>②</strong> $(1, x)$ 局面，其中 $x &gt; 1$，此时先手只需在 $x$ 中取走 $x - 1$，即变为 $(1, 1)$ 这种“安全局面”即可获胜；</p>
+
+<p><strong>③</strong> $(x, x)$ 局面，其中 $x &gt; 1$，此时先手取后变为$(x_1, x)$，后手总是能使局面转变为 $(x_1, x_1)$，若先手不服气，后手总能使局面往 <strong>①</strong> 情况发展，先手必败；</p>
+
+<p><strong>④</strong> $(x_1, x_2)$ 局面， 其中 $x_1 &gt; 1$ 且 $x_2 &gt; 1$，同时有 $x_1 \neq x_2$，此时先手必定能将局面转变为 <strong>③</strong> ，此时先手必胜；</p>
+
+<p>这几种情形似乎能让人联系上异或操作符，先回想下异或操作的规则：</p>
+
+<pre><code>0 $\oplus$ 0 = 0
+0 $\oplus$ 1 = 1
+1 $\oplus$ 1 = 0
+
+注： $\oplus$ 为异或的数学符号
+</code></pre>
+
+<p>根据该规则我们知道，若 $x_1 \neq x_2$ 时，$x_1 \oplus x_2 \neq 0$，若 $x_1 = x_2$ 时，$x_1 \oplus x_2 = 0$</p>
+
+<p>当堆数为 $2$，总石子数目为 $w$ ，两堆均为相等的数目的石子时，此时 $x_1 = \frac{w}{2}$, $x_1 \oplus x_1 = 0$，先手取了其中一堆的 $x_1 - x_2$ 个，局面变为 $(x_1, x_2)$，此时 $x_2 \oplus x_1 \neq 0$，在此基础上后手依旧能使局面变为 $(x_2, x_2)$，$x_2 \oplus x_2 = 0$，若先手不服气，双方僵持直至前面说的 $(1, 1)$ 的局面，因此先手必败。</p>
+
+<p>当堆数为 $2$，总石子数目为 $w$ ，两堆为不相等的数目的石子时，局面状态为 $(x_1, x_2)$ 其中 $x_1 &gt; x_2$，此时 $x_2 \oplus x_1 \neq 0$，先手能使局面变为 $(x_2, x_2)$，$x_2 \oplus x_2 = 0$，游戏进行下去先手必胜。</p>
+
+<p>针对以上 $n = 2$ 时的两种情形的讨论可以发现，堆数为 $2$ 时，两堆的数目的异或结果是否为 $0$ 直接关系到先手是否能取胜（双方都采取最优策略的前提下），因此可以得到这样的结论：<strong>当 $n = 2$ 时，对于 $(x_1, x_2)$，$x_1 &gt; 0$ 且 $x_2 &gt; 0$ ，利用异或操作符我们可以判断出先手的胜负，此时若 $x_1 \oplus x_2 = 0$ ，则后手存在必胜策略，反之 $x_1 \oplus x_2 \neq 0$ 则先手存在必胜策略。</strong></p></li>
+
+<li><p>当 $n &gt; 2$ 时，情况又变得更为复杂，但以下两种情形还是显而易见的：</p>
+
+<p><strong>①</strong> 所有堆均为 $1$ 的情况，此时若 $n$ 为偶数，显然先手败，若 $n$ 为奇数时，先手胜，我们发现此情形下依旧能使用异或进行对先手的胜负进行判断，对于$1 \oplus 1 \oplus \ldots \oplus 1$，当 $1$ 的个数若为偶数则异或结果为 $0$，个数若为奇数时结果不为 $0$，符合 $n = 2$ 时所得出的结论。</p>
+
+<p><strong>②</strong> 所有堆中有且只有一个大于 $1$ 的堆，即 $(1, 1, 1, \ldots,x)$，若为 $1$ 的堆数为偶数时，先手将 $x$ 的那堆直接拿完，后手必败，若为 $1$ 的堆数为奇数时，先手仍可从 $x$ 那堆中拿走 $x - 1$ 个，使局面转变为所有的堆均为 $1$ 且堆数为偶数，此情形下先手必胜。同理的，$1 \oplus 1 \oplus \ldots \oplus x$ 在 $x &gt; 1$ 时，值始终不为 $0$，同样可以以此判断先手的胜负。</p></li>
+</ol>
+
+<p>对于其他情况已经难以分析了，但也能隐约看出异或运算就是关键，难点就在于如何证明这个判定方法对于所有情形通用。</p>
+
+<h3 id="组合博弈-combinatorial-game">组合博弈（Combinatorial Game）</h3>
+
+<p>符合以下特性的博弈称为组合博弈：</p>
+
+<pre><code>1. 只有两位玩家
+2. 游戏的局面是有限集
+3. 游戏规则针对双方，每个局面的转移都要合法。如果两者的移动规则一样，称为对等博弈(impartial games)，否则为不对等博弈(partizan games)。
+4. 双方轮流操作
+5. 当轮到一方已无法继续操作时，游戏结束。在正常的游戏规则下，最后一个操作的人赢。在 misere 游戏规则下，最后一个操作的人输。
+6. 游戏在有限步结束。
+</code></pre>
+
+<p>Nim Game 显然符合组合博弈的定义，由于移动规则对先后手一样，所以更为准确的说是对等组合博弈 (ICG: Impartial Combinationrial Game)。Anti-Nim Game 同样属于 ICG，只不过是采用了 <a href="https://en.wikipedia.org/wiki/Mis%C3%A8re#Mis%C3%A8re_game">misere</a> 规则的 Nim Game。</p>
+
+<h3 id="p态-p-position-n态-n-position">P态(P-position)、N态(N-position)</h3>
+
+<p>P 即 Previous，N 即 Next。规定局面对于上一个操作者可赢的局面状态为 P(Previous) 态，对于接下来的操作者可赢的局面状态为 N(Next) 态，而当局面操作无法继续进行时则定义为终态(Terminal Position)。</p>
+
+<p>对于正常规则下的 ICG，P 态和 N 态有以下几个特征：</p>
+
+<pre><code>1. 所有的终态都是 P 态。
+2. 从 N 态开始总有方法转化为 P 态。
+3. 从 P 态开始总是无法避免的会转化为 N 态。
+</code></pre>
+
+<p>对于采用 misere 规则的 ICG，区别只在于所有的终态都是 N 态。也有一些资料以是否必败来区分局面状态的，但都与前面的 P 态、N 态 性质一致，定义如下：</p>
+
+<p>在对方使用最优策略时，无论做出什么决策都会导致失败的局面称为必败态，其他的局面则称为非必败态。必败态和非必败态有以下性质：</p>
+
+<pre><code>1. 若面临末状态者为获胜则末状态为非必败态否则末状态为必败态。
+2. 一个局面是非必败态的充要条件是该局面进行某种决策后可以成为必败态。
+3. 一个局面是必败态的充要条件是该局面无论进行何种决策均会成为非必败态。
+</code></pre>
+
+<h3 id="bouton-定理及证明">Bouton 定理及证明</h3>
+
+<p>要证明一种判定 position 性质的方法的正确性需要证明以下三个命题：</p>
+
+<pre><code>1. 这个判定方法判定终态(Terminal position)为 P-position（在 misere rule 下则为 N-position）。
+2. 被该方法判定为 P-position 的局面，无法转化为其他 P-position 的局面，或者说必定会转化为 N-position。
+3. 被该方法判定为 N-position 的局面，至少存在一种往 P-position 转化的途径。
+</code></pre>
+
+<p><strong>定理： 对于一个 Nim 游戏，局面为 $(x_1,\ldots, x_n)$，它是 P-position 当且仅当 nim-sum $= 0$ （即: $x_1 \oplus \ldots \oplus x_n = 0$），相对的，当 nim-sum $\neq 0$ 时，局面为 N-position。</strong></p>
+
+<pre><code>证明：
+
+Nim Game 的终态为(0,...,0)，$0$ $\oplus$...$\oplus$ $0$ = 0，因此终态为 P-position，命题 1 得证。
+
+注意到 nim-sum 的运算满足类似加法的结合律与交换律，同时还有两个相同的数异或结果为 0 的特性。我们以 $x_1$,..., $x_n$ 表示移动前的状态，以 $y_1$,...,$y_n$ 为移动后的状态，设 s = $x_1$ $\oplus$...$\oplus$$x_n$ ，t = $y_1$ $\oplus$...$\oplus$$y_n$，当移动的堆为第 k 堆，我们有 $x_i$ = $y_i$ 且 i ≠ k，$x_k$ &gt; $y_k$。根据异或的特性可得：
+
+t = 0 $\oplus$ t
+  = s $\oplus$ s $\oplus$ t
+  = s $\oplus$ ($x_1$ $\oplus$ ... $\oplus$ $x_n$) $\oplus$ ($y_1$ $\oplus$ ... $\oplus$ $y_n$)
+  = s $\oplus$ ($x_1$ $\oplus$ $y_1$) $\oplus$ ... $\oplus$ ($x_n$ $\oplus$ $y_n$)
+  = s $\oplus$ 0 $\oplus$ ... $\oplus$ 0 $\oplus$ ($x_k$ $\oplus$ $y_k$) $\oplus$ 0 $\oplus$ ... $\oplus$ 0
+  = s $\oplus$ $x_k$ $\oplus$ $y_k$
+
+因此： t = s $\oplus$ $x_k$ $\oplus$ $y_k$
+
+对于 P-position 的局面，有 s = 0，t = $x_k$ $\oplus$ $y_k$ 又由异或的特性可得 $x_k$ $\oplus$ $y_k$ ≠ 0，因此 t ≠ 0 。即 P-position 总是无法避免的会转化为 N-position，命题 2 得证。
+
+对于 N-position 的局面，有 s ≠ 0，设第 d 位为 s (以二进制表示) 最左边不为 0 的位，可以找到第 k 堆 $x_k$ (以二进制表示) 的第 d 位不为 0 。再使 $y_k$ = s $\oplus$ $x_k$，已知 $x_k$ &gt; $y_k$ ，$x_k$ 与 $y_k$ 的二进制位从最左边至 d 位相同。将 d 位的 1 变为 0 ，d 位右侧余下的二进制位最高为 $2^d$ - 1。第一位玩家可以从第 k 堆中拿走 $x_k$ - $y_k$ 的物品，使得
+
+t = s $\oplus$ $x_k$ $\oplus$ $y_k$
+  = s $\oplus$ $x_k$ $\oplus$ (s $\oplus$ $x_k$)
+  = 0
+
+即 N-position 总能找到方法使得局面向 P-position 转化，命题 3 得证。
+
+证毕。
+</code></pre>
+
+<p>针对实际进行的 Nim 游戏，当玩家面对 $x_1 \oplus x_2 \oplus \ldots \oplus x_k \ldots \oplus x_n = 0$ 的局面时，无论怎么取都会使 $x_1 \oplus x_2 \oplus \ldots \oplus y_k \ldots \oplus x_n \neq 0$，而当玩家面对 $x_1 \oplus x_2 \oplus \ldots \oplus x_k \ldots \oplus x_n \neq 0$ 则总有办法使 $x_1 \oplus x_2 \oplus \ldots \oplus y_k \ldots \oplus x_n = 0$。因此对于 Nim 游戏有结论：<strong>当 $x_1 \oplus x_2 \oplus \ldots \oplus x_n = 0$  则后手存在必胜策略，否则先手存在必胜策略，当 $x_1 \oplus x_2 \oplus \ldots \oplus x_n \neq 0$ 时，先手若采取最优策略必胜，此时的必胜策略也是显而易见的，只要每次使 $x_1 \oplus x_2 \oplus \ldots \oplus x_n = 0$ 把必败态交给对方即可取胜。</strong></p>
+
+<h2 id="anti-nim-game">Anti-Nim Game</h2>
+
+<p>Nim 游戏是最后取完的人获胜，而 Anti-Nim 则是最后取完的人输。</p>
+
+<p>有了前面对 nim 游戏的分析和证明，我们直接分析 anti-nim 游戏 $n$ 堆 $(n &gt; 0)$ 的情形:</p>
+
+<ol>
+<li><p>当 $n$ 堆石子所有堆的石子的个数均为 $1$，即 $(1, 1, \ldots, 1)$：</p>
+
+<p>① 当 $n$ 为偶数时，为先手的非必败态；</p>
+
+<p>② 当 $n$ 为奇数时，为先手的必败态；</p></li>
+
+<li><p>当 $n$ 堆石子中有且仅有一个石子数目大于 $1$ 的堆，即 $(1, \ldots, x, \ldots,1)$：</p>
+
+<p>① 当 $n - 1$ 为偶数时，先手可将石子数目大于 $1$ 的堆的石子取剩至 $1$ ，转变为 1.②，先手胜；</p>
+
+<p>② 当 $n - 1$ 为奇数时，先手直接将石子数目大于 $1$ 的那堆取完，1.②，先手胜；</p>
+
+<p>因此此场景为先手的非必败态。</p></li>
+
+<li><p>当 $n$ 堆石子中存在两个以上石子数目大于 $1$ 的堆，局面为 $(x_1, x_2,\ldots, x_n)$：</p>
+
+<p>① 当 $x_1 \oplus x_2 \oplus \ldots \oplus x_n = 0$ 时，只可能向两种状态转变</p>
+
+<pre><code>(a). n 堆石子中有且仅有一个石子数目大于 1 的堆；
+
+(b). 依旧存在两个以上石子数目大于 1 的堆，但 $x_1$ $\oplus$ $x_2$ $\oplus$ ... $\oplus$ $x_n$ ≠ 0；
+</code></pre>
+
+<p>此时(a), (b) 两种状态对后手而言是非必败态，也就是说 $x_1 \oplus x_2 \oplus \ldots \oplus x_n = 0$ 时，后手存在必胜策略。</p>
+
+<p>② 当 $x_1 \oplus x_2 \oplus \ldots \oplus x_n \neq 0$ 时，先手总有办法使局面转化为 $x_1 \oplus x_2 \oplus \ldots \oplus x_n = 0$，此时对先手而言，$x_1 \oplus x_2 \oplus \ldots \oplus x_n \neq 0$ 为非必败态，而后手遇到 3.① 的局面只能又把非必败态交给对方。</p></li>
+</ol>
+
+<p>结合以上几种情形可以得出结论: <strong>当所有堆的石子数均为 $1$ 且 $x_1 \oplus x_2 \oplus \ldots \oplus x_n = 0$ 或 至少存在一个以上石子数目大于 1 的堆且 $x_1 \oplus x_2 \oplus \ldots \oplus x_n \neq 0$时，先手存在必胜策略，否则后手存在必胜策略。</strong></p>
+
+<p>以 $(3, 5, 7)$ 为例，符合至少存在一个以上石子数目大于 $1$ 的堆且 $x_1 \oplus x_2 \oplus \ldots \oplus x_n \neq 0$，此时先手存在必胜策略。</p>
+
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left">$2^2$</th>
+<th align="left">$2^1$</th>
+<th align="left">$2^0$</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="left">3</td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">1</td>
+</tr>
+
+<tr>
+<td align="left">5</td>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left">1</td>
+</tr>
+
+<tr>
+<td align="left">7</td>
+<td align="left">1</td>
+<td align="left">1</td>
+<td align="left">1</td>
+</tr>
+
+<tr>
+<td align="left">nim_sum</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">1</td>
+</tr>
+</tbody>
+</table>
+
+<p>必胜策略能以异或运算求得，先求出 nim_sum，在这个例子里 nim_sum = 1；再将 nim_sum 与各个堆的数目进行异或，结果小于原来堆的数目即是合理的策略。</p>
+
+<pre><code>nim_sum $\oplus$ 3 = 2; 2 &lt; 3 合理的策略，可直接在此堆中取走 1 个，使得 nim_sum = 0
+nim_sum $\oplus$ 5 = 4; 4 &lt; 5 同理
+nim_sum $\oplus$ 7 = 6; 6 &lt; 7 同理
+</code></pre>
+
+<p>而要注意的是，当局面转变为有且仅有一个石子数目大于 1 的堆，即 $(1, \ldots, x, \ldots,1)$时，策略就不再是使 nim_sum $= 0$，而是使所有堆的石子的个数均为 $1$ 且堆数 $n$ 为奇数，确保了再次轮到自己时所有堆的石子数均为 $1$ 且 $x_1 \oplus x_2 \oplus \ldots \oplus x_n = 0$。</p>
+
+<h2 id="刷题">刷题</h2>
+
+<p>搜集了几道有关 Nim Game 的编程题：</p>
+
+<p><a href="http://acm.hdu.edu.cn/showproblem.php?pid=2176">杭电oj：取(m堆)石子游戏</a></p>
+
+<p><a href="https://leetcode.com/problems/nim-game/">LeetCode: Nim Game</a></p>
+
+<p><a href="https://www.codewars.com/kata/nim/train/javascript">codewars 4ky 题目: Nim</a></p>
+
+<p>利用已知的结论来求解问题并不困难，以这道 <a href="https://www.codewars.com/kata/nim/train/javascript">codewars 4ky 题目: Nim</a> 为例：</p>
+
+<blockquote>
+<p>This kata explores writing an AI for a two player, turn based game called NIM.</p>
+
+<p><strong>The Board</strong></p>
+
+<p>The board starts out with several piles of straw. Each pile has a random number of straws.</p>
+
+<p>Pile 0: ||||</p>
+
+<p>Pile 1: ||</p>
+
+<p>Pile 2: |||||</p>
+
+<p>Pile 3: |</p>
+
+<p>Pile 4: ||||||</p>
+
+<p>&hellip;or more concisely: [4,2,5,1,6]</p>
+
+<p><strong>The Rules</strong></p>
+
+<p>The players take turns picking a pile, and removing any number of straws from the pile they pick
+A player must pick at least one straw
+If a player picks the last straw, she wins!</p>
+
+<p><strong>The Task</strong></p>
+
+<p>In this kata, you have to write an AI to play the straw picking game.</p>
+
+<p>You have to encode an AI in a function choose_move (or chooseMove, or choose-move) that takes a board, represented as a list of positive integers, and returns</p>
+
+<p><em>[pile_index, number_of_straws]</em></p>
+
+<p>Which refers to an index of a pile on the board, and some none-zero number of straws to draw from that pile.</p>
+
+<p>The test suite is written so that your AI is expected to play 50 games and win every game it plays.</p>
+</blockquote>
+
+<p>题目大意就是给出一个以数组进行表示的局面状态，解题者作为先手需要下出必胜着，以 <em>[pile_index, number_of_straws]</em> 形式返回，即堆的序号以及需取走的数目。这里需要应用到定理中得出的公式: <code>t = s $\oplus$ $x_k$ $\oplus$ $y_k$</code>，依据题意，我们需要做的就是使得 t = 0，再求出 <code>$y_k$</code>，即变化后的数目，最后<code>$x_k$ - $y_k$</code>就是我们需取走的数目，于是有：</p>
+
+<pre><code>0 = s $\oplus$ $x_k$ $\oplus$ $y_k$
+s $\oplus$ 0 = s $\oplus$ s $\oplus$ $x_k$ $\oplus$ $y_k$
+s = $x_k$ $\oplus$ $y_k$
+$y_k$ = s $\oplus$ $x_k$
+</code></pre>
+
+<p>翻译成代码就是如下：</p>
+
+<pre><code class="language-javascript">function chooseMove(state) {
+  let nim_sum = state.reduce((s, a) =&gt; s ^= a, 0);
+  let n = state.find((element, index, arr) =&gt; (element ^ nim_sum) &lt;= arr[index]);
+  return [state.indexOf(n), n - (n ^ nim_sum)];
+}
+</code></pre>
+
+<h2 id="参考">参考</h2>
+
+<p><a href="https://book.douban.com/subject/10606626/">组合数学</a> 1.7 节</p>
+
+<p><a href="https://book.douban.com/subject/3004255/">编程之美</a>    1.12 节</p>
+
+<p><a href="http://www.jstor.org/stable/1967631?origin=crossref&amp;seq=1#page_scan_tab_contents">Nim, A Game with a Complete Mathematical Theory</a></p>
+
+<p><a href="https://en.wikipedia.org/wiki/Nim#Game_play_and_illustration">wiki#Nim</a></p>
+
+<p><a href="https://www.cs.cmu.edu/afs/cs/academic/class/15859-f01/www/notes/comb.pdf">Game Theory</a></p>
+
+      
+      <br/>
+      <p align="center">
+        <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/"><img alt="知识共享许可协议" style="border-width:0" src="https://i.creativecommons.org/l/by-nc/4.0/88x31.png" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可。
+      </p>
+      
+    </div>
+    
+  </article>
+
+  
+
+</main>
+
+    <script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+});
+</script>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="http://nyakokishi.github.io/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="http://nyakokishi.github.io/images/hugo-logo.png" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+
+    
+  </body>
+</html>
+

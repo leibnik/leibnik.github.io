@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Game on nyakokishi&#39;s blog</title>
+    <link>http://nyakokishi.github.io/tags/game/</link>
+    <description>Recent content in Game on nyakokishi&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Tue, 19 Dec 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://nyakokishi.github.io/tags/game/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>一个叫 “拈” 的博弈游戏</title>
+      <link>http://nyakokishi.github.io/2017/12/19/%E4%B8%80%E4%B8%AA%E5%8F%AB-%E6%8B%88-%E7%9A%84%E5%8D%9A%E5%BC%88%E6%B8%B8%E6%88%8F/</link>
+      <pubDate>Tue, 19 Dec 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://nyakokishi.github.io/2017/12/19/%E4%B8%80%E4%B8%AA%E5%8F%AB-%E6%8B%88-%E7%9A%84%E5%8D%9A%E5%BC%88%E6%B8%B8%E6%88%8F/</guid>
+      <description>前言 最近在公司活动中玩了一个博弈游戏，游戏规则比较简单，但其必胜策略却十分耐人寻味，游戏内容就是有三堆物件，数量分别为 $3, 5, 7$ 个，两位玩家轮流从这三堆物件中取物，每次取物只能在三堆物品中选择其中一堆并至少取走一个，可以直接一堆取完，当所有堆都取完时游戏随即结束并且最后取完的玩家判为输。 这个游戏其实是一个叫 Nim 博弈游戏的一种变种玩法，Nim 游戏通常的玩法如下:
+ The normal game is between two players and played with three heaps of any number of objects. The two players alternate taking any number of objects from any single one of the heaps. The goal is to be the last to take an object. #wiki
+ 通常 Nim 游戏的获胜目标是争取成为最后一个取完的玩家，如果反着来，最后一个取完的玩家判为输，则是 Nim 游戏的一种变形，暂且称为 Anti-Nim (部分资料的说法)。
+据了解这个游戏源自中国，后由到美洲打工的华人外传，之所以称为 Nim 有个说法称是由粤语的“拈”音译而得，Nim 游戏后来也演化出多个版本的玩法，它的必胜策略直到 20 世纪初才由一个叫 Charles L.</description>
+    </item>
+    
+  </channel>
+</rss>

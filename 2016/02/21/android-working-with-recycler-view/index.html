@@ -1,0 +1,810 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Hugo 0.40.3" />
+
+
+<title>Android Working with Recycler View - nyakokishi&#39;s blog</title>
+<meta property="og:title" content="Android Working with Recycler View - nyakokishi&#39;s blog">
+
+
+
+  
+
+
+
+
+
+
+<link rel="stylesheet" href="http://nyakokishi.github.io/css/main.css" media="all">
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Merriweather:400|Lato:400,400italic,700">
+<link rel="shortcut icon" type="image/ico" href="/favicon.ico"/>
+
+
+    <script src="http://nyakokishi.github.io/js/highlight.js/9.7.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="http://nyakokishi.github.io/css/highlight.js/9.7.0/styles/github.min.css">
+    <script>hljs.initHighlightingOnLoad();</script>
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+  <a href="http://nyakokishi.github.io/" class="nav-logo"><img src="http://nyakokishi.github.io/images/logo.jpg" width="50" height="50"></a>
+
+  <div class="nav-title-container">
+    <span class="nav-title">nyakokishi</span>
+    <span class="nav-subtitle">弱哭了 (༎ຶ ‿ ༎ຶ )</span>
+ </div>
+
+
+  <ul class="nav-links">
+    
+    <li><a href="/">Home</a></li>
+    
+    <li><a href="/about">About</a></li>
+    
+  </ul>
+</nav>
+
+      </header>
+
+
+<main class="content" role="main">
+
+  <article class="article">
+    
+    <span class="article-duration">8 min read</span>
+    
+
+    <h1 class="article-title">Android Working with Recycler View</h1>
+
+    
+    <span class="article-date">February 2, 2016</span>
+    
+
+    <div class="article-content">
+      
+
+<p>原文：<a href="http://www.androidhive.info/2016/01/android-working-with-recycler-view/">http://www.androidhive.info/2016/01/android-working-with-recycler-view/</a></p>
+
+<p><a href="http://developer.android.com/reference/android/support/v7/widget/RecyclerView.html">RecyclerView</a>
+ 是一个更高级版本的 ListView ，较后者有着性能的提升和其他的优点。同时使用 RecyclerView 和 <a href="http://developer.android.com/reference/android/support/v7/widget/CardView.html">CardView</a> 来生成列表和表格都是非常简单的事情。<a href="http://developer.android.com/training/material/lists-cards.html">这里</a>
+有关于 RecyclerView 和一些例子的完整介绍。</p>
+
+<!-- more -->
+
+<p>在本次教程里，我们将学习如何结合自定义布局渲染出一个简单的 RecyclerView 。同时，我们将学习如何写出一个适配器类，以及为列表添加分割线，为列表项添加点击事件。
+具体的，我们将把这个 RecyclerView 设计成呈现电影信息的列表，包括标题，类型，以及发行时间。</p>
+
+<p>以下就是包含必要配置的 RecyclerView 。</p>
+
+<pre><code class="language-html">&lt;android.support.v7.widget.RecyclerView
+        android:id=&quot;@+id/recycler_view&quot;
+        android:scrollbars=&quot;vertical&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;wrap_content&quot;/&gt;
+</code></pre>
+
+<p>在开始之前，你必须确保将你的 Android Studio 更新到<a href="http://tools.android.com/">最新版本</a>。当前我的 Android Studio 已经更新到了 <strong>Android Studio 2.0 Preview 6</strong>。</p>
+
+<h3 id="一-新建项目">一、新建项目</h3>
+
+<ol>
+<li><p>在 android studio 中，点击 File-&gt;New Project ，填好所有必填项后创建项目。
+当提示选择默认的 activity 时，选择 <strong>Blank Activity</strong> 然后继续。</p></li>
+
+<li><p>打开 <strong>build.gradle</strong> 添加 RecyclerView 的依赖。 <code>com.android.support:recyclerview-v7:23.1.1</code> ，然后 rebuild 项目。</p>
+
+<pre><code class="language-java">BUILD.GRADLE
+dependencies {
+compile fileTree(dir: 'libs', include: ['*.jar'])
+testCompile 'junit:junit:4.12'
+compile 'com.android.support:appcompat-v7:23.1.1'
+compile 'com.android.support:design:23.1.1'
+compile 'com.android.support:recyclerview-v7:23.1.1'
+}
+</code></pre></li>
+
+<li><p>在最新版本的 build tools 中， android studio 会为每个 activity 创建两个布局文件。对于 MainActivity ，它创建了 <strong>activity_main.xml</strong> (包含CoordinatorLayout和AppBarLayout)
+以及 <strong>content_main.xml</strong> (对应实际的内容)。打开 <strong>content_main.xml</strong> 添加 RecyclerView 。</p></li>
+</ol>
+
+<pre><code class="language-html">CONTENT_MAIN.XML
+
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;RelativeLayout
+    xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    xmlns:tools=&quot;http://schemas.android.com/tools&quot;
+    xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;
+    app:layout_behavior=&quot;@string/appbar_scrolling_view_behavior&quot;
+    tools:showIn=&quot;@layout/activity_main&quot;
+    tools:context=&quot;.MainActivity&quot;&gt;
+ 
+    &lt;android.support.v7.widget.RecyclerView
+        android:id=&quot;@+id/recycler_view&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:scrollbars=&quot;vertical&quot; /&gt;
+ 
+&lt;/RelativeLayout&gt;
+</code></pre>
+
+<ol>
+<li>在 res-&gt;values 路径下打开 <strong>colors.xml</strong> 并添加以下几种颜色。</li>
+</ol>
+
+<pre><code class="language-html">COLORS.XML
+
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;resources&gt;
+    &lt;color name=&quot;colorPrimary&quot;&gt;#3F51B5&lt;/color&gt;
+    &lt;color name=&quot;colorPrimaryDark&quot;&gt;#303F9F&lt;/color&gt;
+    &lt;color name=&quot;colorAccent&quot;&gt;#FF4081&lt;/color&gt;
+    &lt;color name=&quot;year&quot;&gt;#999999&lt;/color&gt;
+    &lt;color name=&quot;title&quot;&gt;#222222&lt;/color&gt;
+&lt;/resources&gt;
+</code></pre>
+
+<h3 id="二-写适配器类">二、写适配器类</h3>
+
+<p>添加完 RecyclerView 之后，我们开始写适配器类来填充数据。 RecyclerView 的适配器和 ListView 的一样只是重写的方法不同。</p>
+
+<ol>
+<li>新建一个类 <strong>Movie</strong> 并声明 title ， genre 以及 year 。同时为每个变量生成相应的 getter/setter 方法。</li>
+</ol>
+
+<pre><code class="language-java">MOVIE.JAVA
+
+package info.androidhive.recyclerview;
+ 
+public class Movie {
+    private String title, genre, year;
+ 
+    public Movie() {
+    }
+ 
+    public Movie(String title, String genre, String year) {
+        this.title = title;
+        this.genre = genre;
+        this.year = year;
+    }
+ 
+    public String getTitle() {
+        return title;
+    }
+ 
+    public void setTitle(String name) {
+        this.title = name;
+    }
+ 
+    public String getYear() {
+        return year;
+    }
+ 
+    public void setYear(String year) {
+        this.year = year;
+    }
+ 
+    public String getGenre() {
+        return genre;
+    }
+ 
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+}
+</code></pre>
+
+<ol>
+<li>使用下面的代码新建一个布局文件 <strong>movie_list_row.xml</strong> ，这个布局文件通过展示电影名称，类型，发行年份来渲染了 RecyclerView 中单个的项。</li>
+</ol>
+
+<pre><code class="language-html">MOVIE_LIST_ROW.XML
+
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;RelativeLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;
+    android:focusable=&quot;true&quot;
+    android:paddingLeft=&quot;16dp&quot;
+    android:paddingRight=&quot;16dp&quot;
+    android:paddingTop=&quot;10dp&quot;
+    android:paddingBottom=&quot;10dp&quot;
+    android:clickable=&quot;true&quot;
+    android:background=&quot;?android:attr/selectableItemBackground&quot;
+    android:orientation=&quot;vertical&quot;&gt;
+ 
+    &lt;TextView
+        android:id=&quot;@+id/title&quot;
+        android:textColor=&quot;@color/title&quot;
+        android:textSize=&quot;16dp&quot;
+        android:textStyle=&quot;bold&quot;
+        android:layout_alignParentTop=&quot;true&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;wrap_content&quot; /&gt;
+ 
+    &lt;TextView
+        android:id=&quot;@+id/genre&quot;
+        android:layout_below=&quot;@id/title&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;wrap_content&quot; /&gt;
+ 
+    &lt;TextView
+        android:id=&quot;@+id/year&quot;
+        android:textColor=&quot;@color/year&quot;
+        android:layout_width=&quot;wrap_content&quot;
+        android:layout_alignParentRight=&quot;true&quot;
+        android:layout_height=&quot;wrap_content&quot; /&gt;
+ 
+&lt;/RelativeLayout&gt;
+</code></pre>
+
+<ol>
+<li>现在新建一个类 <strong>MoviesAdapter.java</strong> 并添加如下的代码。其中 <strong>onCreateViewHolder()</strong> 方法使 <strong>movie_list_row.xml</strong> 布局得到填充。
+在 <strong>onBindViewHolder()</strong> 方法中将电影信息（标题，类型，年份）设置到每一项中。</li>
+</ol>
+
+<pre><code class="language-java">MOVIESADAPTER.JAVA
+
+package info.androidhive.recyclerview;
+ 
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+ 
+import java.util.List;
+ 
+public class MoviesAdapter extends RecyclerView.Adapter&lt;MoviesAdapter.MyViewHolder&gt; {
+ 
+    private List&lt;Movie&gt; moviesList;
+ 
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        public TextView title, year, genre;
+ 
+        public MyViewHolder(View view) {
+            super(view);
+            title = (TextView) view.findViewById(R.id.title);
+            genre = (TextView) view.findViewById(R.id.genre);
+            year = (TextView) view.findViewById(R.id.year);
+        }
+    }
+ 
+ 
+    public MoviesAdapter(List&lt;Movie&gt; moviesList) {
+        this.moviesList = moviesList;
+    }
+ 
+    @Override
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.movie_list_row, parent, false);
+ 
+        return new MyViewHolder(itemView);
+    }
+ 
+    @Override
+    public void onBindViewHolder(MyViewHolder holder, int position) {
+        Movie movie = moviesList.get(position);
+        holder.title.setText(movie.getTitle());
+        holder.genre.setText(movie.getGenre());
+        holder.year.setText(movie.getYear());
+    }
+ 
+    @Override
+    public int getItemCount() {
+        return moviesList.size();
+    }
+}
+</code></pre>
+
+<ol>
+<li>现在打开 <strong>MainActivity.java</strong> 并依据下面代码做修改。其中 <strong>prepareMovieData()</strong> 方法为列表添加了样例数据。</li>
+</ol>
+
+<pre><code class="language-java">MAINACTIVITY.JAVA
+
+package info.androidhive.recyclerview;
+ 
+import android.content.Context;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Toast;
+ 
+import java.util.ArrayList;
+import java.util.List;
+ 
+public class MainActivity extends AppCompatActivity {
+    private List&lt;Movie&gt; movieList = new ArrayList&lt;&gt;();
+    private RecyclerView recyclerView;
+    private MoviesAdapter mAdapter;
+ 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+ 
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+ 
+        mAdapter = new MoviesAdapter(movieList);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(mAdapter);
+ 
+        prepareMovieData();
+    }
+ 
+    private void prepareMovieData() {
+        Movie movie = new Movie(&quot;Mad Max: Fury Road&quot;, &quot;Action &amp; Adventure&quot;, &quot;2015&quot;);
+        movieList.add(movie);
+ 
+        movie = new Movie(&quot;Inside Out&quot;, &quot;Animation, Kids &amp; Family&quot;, &quot;2015&quot;);
+        movieList.add(movie);
+ 
+        movie = new Movie(&quot;Star Wars: Episode VII - The Force Awakens&quot;, &quot;Action&quot;, &quot;2015&quot;);
+        movieList.add(movie);
+ 
+        movie = new Movie(&quot;Shaun the Sheep&quot;, &quot;Animation&quot;, &quot;2015&quot;);
+        movieList.add(movie);
+ 
+        movie = new Movie(&quot;The Martian&quot;, &quot;Science Fiction &amp; Fantasy&quot;, &quot;2015&quot;);
+        movieList.add(movie);
+ 
+        movie = new Movie(&quot;Mission: Impossible Rogue Nation&quot;, &quot;Action&quot;, &quot;2015&quot;);
+        movieList.add(movie);
+ 
+        movie = new Movie(&quot;Up&quot;, &quot;Animation&quot;, &quot;2009&quot;);
+        movieList.add(movie);
+ 
+        movie = new Movie(&quot;Star Trek&quot;, &quot;Science Fiction&quot;, &quot;2009&quot;);
+        movieList.add(movie);
+ 
+        movie = new Movie(&quot;The LEGO Movie&quot;, &quot;Animation&quot;, &quot;2014&quot;);
+        movieList.add(movie);
+ 
+        movie = new Movie(&quot;Iron Man&quot;, &quot;Action &amp; Adventure&quot;, &quot;2008&quot;);
+        movieList.add(movie);
+ 
+        movie = new Movie(&quot;Aliens&quot;, &quot;Science Fiction&quot;, &quot;1986&quot;);
+        movieList.add(movie);
+ 
+        movie = new Movie(&quot;Chicken Run&quot;, &quot;Animation&quot;, &quot;2000&quot;);
+        movieList.add(movie);
+ 
+        movie = new Movie(&quot;Back to the Future&quot;, &quot;Science Fiction&quot;, &quot;1985&quot;);
+        movieList.add(movie);
+ 
+        movie = new Movie(&quot;Raiders of the Lost Ark&quot;, &quot;Action &amp; Adventure&quot;, &quot;1981&quot;);
+        movieList.add(movie);
+ 
+        movie = new Movie(&quot;Goldfinger&quot;, &quot;Action &amp; Adventure&quot;, &quot;1965&quot;);
+        movieList.add(movie);
+ 
+        movie = new Movie(&quot;Guardians of the Galaxy&quot;, &quot;Science Fiction &amp; Fantasy&quot;, &quot;2014&quot;);
+        movieList.add(movie);
+ 
+        mAdapter.notifyDataSetChanged();
+    }
+}
+</code></pre>
+
+<p>现在如果你运行你的 app ，你将看到电影的数据以列表的方式展示了。</p>
+
+<p><img src="http://ww2.sinaimg.cn/mw690/006nezkigw1f16n7lfcmsj30k00qh0us.jpg" alt="" /></p>
+
+<h3 id="三-添加-recyclerview-的分割线">三、添加 RecyclerView 的分割线</h3>
+
+<p>RecyclerView 并没有任何与分割线直接相关的属性去显示分割线。然而你需要的是继承类 [ItemDecoration]()
+同时使用 <strong>addItemDecoration()</strong> 方法来显示分割线。</p>
+
+<ol>
+<li>使用以下代码创建一个类 <strong>DividerItemDecoration.java</strong></li>
+</ol>
+
+<pre><code class="language-java">
+DIVIDERITEMDECORATION.JAVA
+
+package info.androidhive.recyclerview;
+ 
+import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.Canvas;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+ 
+/**
+ * Created by Lincoln on 30/10/15.
+ */
+public class DividerItemDecoration extends RecyclerView.ItemDecoration {
+ 
+    private static final int[] ATTRS = new int[]{
+            android.R.attr.listDivider
+    };
+ 
+    public static final int HORIZONTAL_LIST = LinearLayoutManager.HORIZONTAL;
+ 
+    public static final int VERTICAL_LIST = LinearLayoutManager.VERTICAL;
+ 
+    private Drawable mDivider;
+ 
+    private int mOrientation;
+ 
+    public DividerItemDecoration(Context context, int orientation) {
+        final TypedArray a = context.obtainStyledAttributes(ATTRS);
+        mDivider = a.getDrawable(0);
+        a.recycle();
+        setOrientation(orientation);
+    }
+ 
+    public void setOrientation(int orientation) {
+        if (orientation != HORIZONTAL_LIST &amp;&amp; orientation != VERTICAL_LIST) {
+            throw new IllegalArgumentException(&quot;invalid orientation&quot;);
+        }
+        mOrientation = orientation;
+    }
+ 
+    @Override
+    public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
+        if (mOrientation == VERTICAL_LIST) {
+            drawVertical(c, parent);
+        } else {
+            drawHorizontal(c, parent);
+        }
+    }
+ 
+    public void drawVertical(Canvas c, RecyclerView parent) {
+        final int left = parent.getPaddingLeft();
+        final int right = parent.getWidth() - parent.getPaddingRight();
+ 
+        final int childCount = parent.getChildCount();
+        for (int i = 0; i &lt; childCount; i++) {
+            final View child = parent.getChildAt(i);
+            final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child
+                    .getLayoutParams();
+            final int top = child.getBottom() + params.bottomMargin;
+            final int bottom = top + mDivider.getIntrinsicHeight();
+            mDivider.setBounds(left, top, right, bottom);
+            mDivider.draw(c);
+        }
+    }
+ 
+    public void drawHorizontal(Canvas c, RecyclerView parent) {
+        final int top = parent.getPaddingTop();
+        final int bottom = parent.getHeight() - parent.getPaddingBottom();
+ 
+        final int childCount = parent.getChildCount();
+        for (int i = 0; i &lt; childCount; i++) {
+            final View child = parent.getChildAt(i);
+            final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child
+                    .getLayoutParams();
+            final int left = child.getRight() + params.rightMargin;
+            final int right = left + mDivider.getIntrinsicHeight();
+            mDivider.setBounds(left, top, right, bottom);
+            mDivider.draw(c);
+        }
+    }
+ 
+    @Override
+    public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+        if (mOrientation == VERTICAL_LIST) {
+            outRect.set(0, 0, 0, mDivider.getIntrinsicHeight());
+        } else {
+            outRect.set(0, 0, mDivider.getIntrinsicWidth(), 0);
+        }
+    }
+}
+</code></pre>
+
+<ol>
+<li>打开 <strong>MainActivity.java</strong> ，在为 RecycleView 设置适配器之前使用 <code>addItemDecoration()</code> 方法设置分割线。</li>
+</ol>
+
+<pre><code class="language-java">recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+ 
+// set the adapter
+recyclerView.setAdapter(mAdapter);
+</code></pre>
+
+<p>如果现在运行你的 app ，你将看到分割线成功分割了列表的每一行。</p>
+
+<p><img src="http://ww4.sinaimg.cn/mw690/006nezkigw1f16n5zw484j30k00fptad.jpg" alt="" /></p>
+
+<h3 id="四-为-recyclerview-添加点击事件">四、为 RecyclerView 添加点击事件</h3>
+
+<p>RecycleView 没有 OnItemClickListener 方法去识别列表项的点击事件。而你需要做的就是写一个类继承 <a href="https://developer.android.com/reference/android/support/v7/widget/RecyclerView.OnItemTouchListener.html">RecyclerView.OnItemTouchListener</a> 。</p>
+
+<ol>
+<li>打开 <strong>MainActivity.java</strong> 并添加 <strong>RecyclerTouchListener</strong> 类以及 <strong>ClickListener</strong> 接口</li>
+</ol>
+
+<pre><code class="language-java">MAINACTIVITY.JAVA
+
+public interface ClickListener {
+        void onClick(View view, int position);
+ 
+        void onLongClick(View view, int position);
+}
+ 
+public static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
+
+    private GestureDetector gestureDetector;
+    private MainActivity.ClickListener clickListener;
+
+    public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final MainActivity.ClickListener clickListener) {
+        this.clickListener = clickListener;
+        gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onSingleTapUp(MotionEvent e) {
+                return true;
+            }
+
+            @Override
+            public void onLongPress(MotionEvent e) {
+                View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
+                if (child != null &amp;&amp; clickListener != null) {
+                    clickListener.onLongClick(child, recyclerView.getChildPosition(child));
+                }
+            }
+        });
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+
+        View child = rv.findChildViewUnder(e.getX(), e.getY());
+        if (child != null &amp;&amp; clickListener != null &amp;&amp; gestureDetector.onTouchEvent(e)) {
+            clickListener.onClick(child, rv.getChildPosition(child));
+        }
+        return false;
+    }
+
+    @Override
+    public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+    }
+
+    @Override
+    public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+    }
+}
+</code></pre>
+
+<p>最后以如下的代码为 RecyclerView 添加点击事件。</p>
+
+<pre><code class="language-java">recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                Movie movie = movieList.get(position);
+                Toast.makeText(getApplicationContext(), movie.getTitle() + &quot; is selected!&quot;, Toast.LENGTH_SHORT).show();
+            }
+ 
+            @Override
+            public void onLongClick(View view, int position) {
+ 
+            }
+        }));
+</code></pre>
+
+<p>运行 app 然后检验点击事件。当点击其中一行时你应该能看到一条 Toast 信息弹出来。如果你在 lollipop 版本的设备上测试时，还能看到波纹效果。</p>
+
+<p><img src="http://ww2.sinaimg.cn/mw690/006nezkigw1f16n5ytcnuj30k00hjwfs.jpg" alt="" /></p>
+
+<h3 id="完整的代码">完整的代码</h3>
+
+<p>以下就是完整的 <strong>MainActivity.java</strong></p>
+
+<pre><code class="language-java">MAINACTIVITY.JAVA
+
+package info.androidhive.recyclerview;
+ 
+import android.content.Context;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Toast;
+ 
+import java.util.ArrayList;
+import java.util.List;
+ 
+public class MainActivity extends AppCompatActivity {
+    private List&lt;Movie&gt; movieList = new ArrayList&lt;&gt;();
+    private RecyclerView recyclerView;
+    private MoviesAdapter mAdapter;
+ 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+ 
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+ 
+        mAdapter = new MoviesAdapter(movieList);
+ 
+        recyclerView.setHasFixedSize(true);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(mAdapter);
+ 
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                Movie movie = movieList.get(position);
+                Toast.makeText(getApplicationContext(), movie.getTitle() + &quot; is selected!&quot;, Toast.LENGTH_SHORT).show();
+            }
+ 
+            @Override
+            public void onLongClick(View view, int position) {
+ 
+            }
+        }));
+ 
+        prepareMovieData();
+    }
+ 
+    private void prepareMovieData() {
+        Movie movie = new Movie(&quot;Mad Max: Fury Road&quot;, &quot;Action &amp; Adventure&quot;, &quot;2015&quot;);
+        movieList.add(movie);
+ 
+        movie = new Movie(&quot;Inside Out&quot;, &quot;Animation, Kids &amp; Family&quot;, &quot;2015&quot;);
+        movieList.add(movie);
+ 
+        movie = new Movie(&quot;Star Wars: Episode VII - The Force Awakens&quot;, &quot;Action&quot;, &quot;2015&quot;);
+        movieList.add(movie);
+ 
+        movie = new Movie(&quot;Shaun the Sheep&quot;, &quot;Animation&quot;, &quot;2015&quot;);
+        movieList.add(movie);
+ 
+        movie = new Movie(&quot;The Martian&quot;, &quot;Science Fiction &amp; Fantasy&quot;, &quot;2015&quot;);
+        movieList.add(movie);
+ 
+        movie = new Movie(&quot;Mission: Impossible Rogue Nation&quot;, &quot;Action&quot;, &quot;2015&quot;);
+        movieList.add(movie);
+ 
+        movie = new Movie(&quot;Up&quot;, &quot;Animation&quot;, &quot;2009&quot;);
+        movieList.add(movie);
+ 
+        movie = new Movie(&quot;Star Trek&quot;, &quot;Science Fiction&quot;, &quot;2009&quot;);
+        movieList.add(movie);
+ 
+        movie = new Movie(&quot;The LEGO Movie&quot;, &quot;Animation&quot;, &quot;2014&quot;);
+        movieList.add(movie);
+ 
+        movie = new Movie(&quot;Iron Man&quot;, &quot;Action &amp; Adventure&quot;, &quot;2008&quot;);
+        movieList.add(movie);
+ 
+        movie = new Movie(&quot;Aliens&quot;, &quot;Science Fiction&quot;, &quot;1986&quot;);
+        movieList.add(movie);
+ 
+        movie = new Movie(&quot;Chicken Run&quot;, &quot;Animation&quot;, &quot;2000&quot;);
+        movieList.add(movie);
+ 
+        movie = new Movie(&quot;Back to the Future&quot;, &quot;Science Fiction&quot;, &quot;1985&quot;);
+        movieList.add(movie);
+ 
+        movie = new Movie(&quot;Raiders of the Lost Ark&quot;, &quot;Action &amp; Adventure&quot;, &quot;1981&quot;);
+        movieList.add(movie);
+ 
+        movie = new Movie(&quot;Goldfinger&quot;, &quot;Action &amp; Adventure&quot;, &quot;1965&quot;);
+        movieList.add(movie);
+ 
+        movie = new Movie(&quot;Guardians of the Galaxy&quot;, &quot;Science Fiction &amp; Fantasy&quot;, &quot;2014&quot;);
+        movieList.add(movie);
+ 
+        mAdapter.notifyDataSetChanged();
+    }
+ 
+    public interface ClickListener {
+        void onClick(View view, int position);
+ 
+        void onLongClick(View view, int position);
+    }
+ 
+    public static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
+ 
+        private GestureDetector gestureDetector;
+        private MainActivity.ClickListener clickListener;
+ 
+        public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final MainActivity.ClickListener clickListener) {
+            this.clickListener = clickListener;
+            gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onSingleTapUp(MotionEvent e) {
+                    return true;
+                }
+ 
+                @Override
+                public void onLongPress(MotionEvent e) {
+                    View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
+                    if (child != null &amp;&amp; clickListener != null) {
+                        clickListener.onLongClick(child, recyclerView.getChildPosition(child));
+                    }
+                }
+            });
+        }
+ 
+        @Override
+        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+ 
+            View child = rv.findChildViewUnder(e.getX(), e.getY());
+            if (child != null &amp;&amp; clickListener != null &amp;&amp; gestureDetector.onTouchEvent(e)) {
+                clickListener.onClick(child, rv.getChildPosition(child));
+            }
+            return false;
+        }
+ 
+        @Override
+        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+        }
+ 
+        @Override
+        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+ 
+        }
+    }
+ 
+}
+</code></pre>
+
+      
+      <br/>
+      <p align="center">
+        <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/"><img alt="知识共享许可协议" style="border-width:0" src="https://i.creativecommons.org/l/by-nc/4.0/88x31.png" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可。
+      </p>
+      
+    </div>
+    
+  </article>
+
+  
+
+</main>
+
+      <footer class="footer">
+        <ul class="footer-links">
+          <li>
+            <a href="http://nyakokishi.github.io/index.xml" type="application/rss+xml" target="_blank">RSS feed</a>
+          </li>
+          <li>
+            <a href="https://gohugo.io/" class="footer-links-kudos">Made with <img src="http://nyakokishi.github.io/images/hugo-logo.png" width="22" height="22"></a>
+          </li>
+        </ul>
+      </footer>
+
+    </div>
+
+    
+  </body>
+</html>
+

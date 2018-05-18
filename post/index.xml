@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on nyakokishi&#39;s blog</title>
+    <link>http://nyakokishi.github.io/post/</link>
+    <description>Recent content in Posts on nyakokishi&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 29 Jan 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://nyakokishi.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Generation of permutations and combinations</title>
+      <link>http://nyakokishi.github.io/2018/01/29/generation-of-permutations-and-combinations/</link>
+      <pubDate>Mon, 29 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://nyakokishi.github.io/2018/01/29/generation-of-permutations-and-combinations/</guid>
+      <description>Ref Generation of Permutations by Adjacent Transposition
+Generation of Permutations by Transposition
+组合数学 chapter 4</description>
+    </item>
+    
+    <item>
+      <title>一个叫 “拈” 的博弈游戏</title>
+      <link>http://nyakokishi.github.io/2017/12/19/%E4%B8%80%E4%B8%AA%E5%8F%AB-%E6%8B%88-%E7%9A%84%E5%8D%9A%E5%BC%88%E6%B8%B8%E6%88%8F/</link>
+      <pubDate>Tue, 19 Dec 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://nyakokishi.github.io/2017/12/19/%E4%B8%80%E4%B8%AA%E5%8F%AB-%E6%8B%88-%E7%9A%84%E5%8D%9A%E5%BC%88%E6%B8%B8%E6%88%8F/</guid>
+      <description>前言 最近在公司活动中玩了一个博弈游戏，游戏规则比较简单，但其必胜策略却十分耐人寻味，游戏内容就是有三堆物件，数量分别为 $3, 5, 7$ 个，两位玩家轮流从这三堆物件中取物，每次取物只能在三堆物品中选择其中一堆并至少取走一个，可以直接一堆取完，当所有堆都取完时游戏随即结束并且最后取完的玩家判为输。 这个游戏其实是一个叫 Nim 博弈游戏的一种变种玩法，Nim 游戏通常的玩法如下:
+ The normal game is between two players and played with three heaps of any number of objects. The two players alternate taking any number of objects from any single one of the heaps. The goal is to be the last to take an object. #wiki
+ 通常 Nim 游戏的获胜目标是争取成为最后一个取完的玩家，如果反着来，最后一个取完的玩家判为输，则是 Nim 游戏的一种变形，暂且称为 Anti-Nim (部分资料的说法)。
+据了解这个游戏源自中国，后由到美洲打工的华人外传，之所以称为 Nim 有个说法称是由粤语的“拈”音译而得，Nim 游戏后来也演化出多个版本的玩法，它的必胜策略直到 20 世纪初才由一个叫 Charles L.</description>
+    </item>
+    
+    <item>
+      <title>Android SurfaceView 截屏方案探索</title>
+      <link>http://nyakokishi.github.io/2017/09/14/android-surfaceview-%E6%88%AA%E5%B1%8F%E6%96%B9%E6%A1%88%E6%8E%A2%E7%B4%A2/</link>
+      <pubDate>Thu, 14 Sep 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://nyakokishi.github.io/2017/09/14/android-surfaceview-%E6%88%AA%E5%B1%8F%E6%96%B9%E6%A1%88%E6%8E%A2%E7%B4%A2/</guid>
+      <description>前言 今年 6月底开始着手公司直播 App 的重写工作，整个 app 是要推倒用 kotlin 重写，重写的同时也增加了旧版所没有的新功能， 其中，直播间的截图分享功能就是其中一个。
+直奔主题 首先，通过视图基类 View 的 getDrawingCache() 方法获取整个直播间截图只是个美好的愿望，调用直播间根布局的 getDrawingCache() 方法， 除了 SurfaceView 之外的其他视图，确实能出现在截图中，但理应出现在 SurfaceView 上的画面却是黑的，或者说是空的，无法通过此方法获取画面的数据。
+简单来说，SurfaceView 由 Surface 和 View 两部分所组成，而 SurfaceView 的 view 部分只是一个透明的占位符，内容却是渲染在 Surface 上的, 其中底层组件 BufferQueue 提供了 将可生成图形数据缓冲区的组件（生产者）连到接受数据以便进行显示或进一步处理的组件（消费者）的接口，生成者如 Canvas，openGL ES ，一旦数据被消费者接受，就无法通过获取这些数据来创建 Bitmap 了，但解决的招数还是有的：
+ 对于使用 Canvas 渲染，渲染两次，其中一次用于创建截图 对于使用 GLES 渲染的，可以使用 glReadPixels() 方法创建 Bitmap  在项目我采用的是第二种方法，虽然使用 GLES 时并不非要 GLSurfaceView，但却省事不少，更省事的是我无需去造一个轮子，因为已经有人给出了实现
+https://github.com/tarek360/Instacapture (原repo, 支持Rxjava1) https://github.com/nyakokishi/Instacapture (本人 fork 的 repo, 支持Rxjava2)
+这个截屏轮子，支持 Android 4.</description>
+    </item>
+    
+    <item>
+      <title>Android Working with Recycler View</title>
+      <link>http://nyakokishi.github.io/2016/02/21/android-working-with-recycler-view/</link>
+      <pubDate>Sun, 21 Feb 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://nyakokishi.github.io/2016/02/21/android-working-with-recycler-view/</guid>
+      <description>原文：http://www.androidhive.info/2016/01/android-working-with-recycler-view/
+RecyclerView 是一个更高级版本的 ListView ，较后者有着性能的提升和其他的优点。同时使用 RecyclerView 和 CardView 来生成列表和表格都是非常简单的事情。这里 有关于 RecyclerView 和一些例子的完整介绍。
+在本次教程里，我们将学习如何结合自定义布局渲染出一个简单的 RecyclerView 。同时，我们将学习如何写出一个适配器类，以及为列表添加分割线，为列表项添加点击事件。 具体的，我们将把这个 RecyclerView 设计成呈现电影信息的列表，包括标题，类型，以及发行时间。
+以下就是包含必要配置的 RecyclerView 。
+&amp;lt;android.support.v7.widget.RecyclerView android:id=&amp;quot;@+id/recycler_view&amp;quot; android:scrollbars=&amp;quot;vertical&amp;quot; android:layout_width=&amp;quot;match_parent&amp;quot; android:layout_height=&amp;quot;wrap_content&amp;quot;/&amp;gt;  在开始之前，你必须确保将你的 Android Studio 更新到最新版本。当前我的 Android Studio 已经更新到了 Android Studio 2.0 Preview 6。
+一、新建项目  在 android studio 中，点击 File-&amp;gt;New Project ，填好所有必填项后创建项目。 当提示选择默认的 activity 时，选择 Blank Activity 然后继续。
+ 打开 build.gradle 添加 RecyclerView 的依赖。 com.android.support:recyclerview-v7:23.1.1 ，然后 rebuild 项目。
+BUILD.GRADLE dependencies { compile fileTree(dir: &#39;libs&#39;, include: [&#39;*.</description>
+    </item>
+    
+    <item>
+      <title>Matrix in Android</title>
+      <link>http://nyakokishi.github.io/2016/01/12/matrix-in-android/</link>
+      <pubDate>Tue, 12 Jan 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://nyakokishi.github.io/2016/01/12/matrix-in-android/</guid>
+      <description>许多时候我们在数学课本上学到的多数都停留在知其然而不知其所以然的状态，比如学了线性代数有什么用，可能多数人都回答不上来。而对于程序员，要理解它可能从应用的角度出发把线性代数当作是一种人为设计的领域特定语言（ domain specific language ）可能更容易被他们所接受。具体参考：程序观点下的线性代数。
+本文只简单介绍（复习）矩阵的定义、矩阵的运算，以及在 android 中使用矩阵
+矩阵的定义  由 $m\times n$ 个数 $a_{ij}(i=1,2,\dots,m;j=1,2,\dots,n)$ 排成的 m 行 n 列的数表:
+ $$ \begin{matrix} a_{11} &amp; a_{12} &amp; \dots &amp; a_{1n}\\ a_{21} &amp; a_{22} &amp; \dots &amp; a_{2n}\\ \vdots &amp; \vdots &amp; &amp; \vdots\\ a_{m1} &amp; a_{m2} &amp; \dots &amp; a_{mn} \end{matrix} $$  称为 m 行 n 列矩阵。
+ 人们常常使用大写字母来表示矩阵，如
+ $$ A=\begin{bmatrix} a_{11} &amp; a_{12} &amp; \cdots &amp; a_{1n}\\ a_{21} &amp; a_{22} &amp; \cdots &amp; a_{2n}\\ \vdots &amp; \vdots &amp; &amp;\vdots\\ a_{m1} &amp; a_{m2} &amp; \cdots &amp; a_{mn} \end{bmatrix} $$  $a_{ij}(i=1,2,\cdots,m; j=1,2, \cdots,n)$ 即为矩阵 A 中第 i 行第 j 列的元素。</description>
+    </item>
+    
+  </channel>
+</rss>

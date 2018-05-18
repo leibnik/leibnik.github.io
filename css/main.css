@@ -1,0 +1,384 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+
+body {
+    font-family: "lucida grande", "lucida sans unicode", lucida, helvetica, "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -moz-font-feature-settings: "liga" on;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Lato', Consolas, sans-serif;
+    color: #222;
+}
+
+a {
+    outline: none;
+}
+
+.wrapper {
+    overflow: hidden;
+    position: relative;
+}
+
+.header {
+    padding: 12px 0;
+    position: relative;
+    background: #f5f5f5;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.nav {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 15px;
+    font-family: 'Lato', Consolas, sans-serif;
+    text-align: right;
+    display: flex;
+    align-items: center;
+}
+
+.nav div {
+    float: left;
+}
+
+.nav-logo {
+    float: left;
+    transition: transform 150ms ease-out;
+}
+
+.nav-logo:hover {
+    transform: scale(1.1);
+}
+
+.nav-logo img {
+    display: block;
+    max-height: 40px;
+    width: auto;
+    border-radius: 50%;
+}
+
+.nav-title {
+    float: left;
+    font-size: 20px;
+    margin-left: 12px;
+    text-align: left;
+}
+
+.nav-subtitle {
+    float: left;
+    color: #888;
+    margin-left: 12px;
+    font-size: 12px;
+    margin-top: 5px;
+    text-align: left;
+}
+
+.nav-title-container {
+    flex: 1;
+    flex-direction: column;
+    display: flex;
+}
+
+.nav-links {
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    list-style: none;
+    flex: 1;
+}
+
+.nav-links li {
+    display: inline-block;
+    margin: 0 0 0 15px;
+}
+
+.nav-links li:first-child {
+    margin-left: 0;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #111;
+}
+
+.nav-links a:hover {
+    color: #000;
+}
+
+.content {
+    max-width: 700px;
+    margin: 60px auto 80px;
+    padding: 0 15px;
+    font-size: 16px;
+    line-height: 1.7;
+    color: #555;
+}
+
+.article-title {
+    font-size: 34px;
+    color: #222;
+    margin: 0;
+    line-height: 1.3;
+}
+
+.article-date {
+    color: #ccc;
+}
+
+.article-duration {
+    margin-top: 12px;
+    float: right;
+    font-size: 10px;
+    font-family: 'Lato', Consolas, sans-serif;
+    padding: 1px 5px;
+    font-weight: bold;
+    border-radius: 3px;
+    background: #bbb;
+    color: #fff
+}
+
+.article-content p {
+    margin: 15px 0 25px;
+}
+
+.article-content a {
+    text-decoration: none;
+    color: #009fef;
+    transition: background 150ms ease;
+}
+
+.article-content a:hover,
+.article-content a:focus {
+    background: #EBF8DF;
+}
+
+.article-content hr {
+    width: 150px;
+    margin: 50px auto;
+    height: 1px;
+    overflow: hidden;
+    border: none;
+    background: #e5e5e5;
+}
+
+blockquote {
+    border-left: 5px solid #eee;
+    background: #f9f9f9;
+    padding: 10px 10px 10px 25px;
+}
+
+.content img {
+    display: block;
+    margin: 0 auto;
+}
+
+code {
+    padding: 2px 4px;
+    background-color: #fdf6e3;
+    border: none;
+    color: #657b83;
+    font-size: 14px;
+    white-space: pre-wrap;
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+table {
+    width: 100%;
+    margin-bottom: 20px;
+    border: 1px solid #dddddd;
+    width: 100%;
+    margin-bottom: 20px;
+    border: 1px solid #dddddd;
+    border-collapse: collapse;
+    border-left: none;
+    border-left: none;
+}
+
+td {
+    padding: 8px;
+    border-left: 1px solid #dddddd;
+    border-top: 1px solid #dddddd;
+    line-height: 20px;
+    vertical-align: top;
+}
+
+th {
+    vertical-align: bottom;
+    padding: 8px;
+    border-left: 1px solid #dddddd;
+    border-top: 1px solid #dddddd;
+    line-height: 20px;
+}
+
+pre {
+    background: #f8f8f8;
+    padding: 10px;
+}
+
+pre code {
+    background: transparent;
+}
+
+.highlight {
+    border-radius: 3px;
+    position: relative;
+    margin: 40px 0;
+    font-size: 14px;
+}
+
+.highlight pre {
+    padding: 10px;
+}
+
+.archive {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    line-height: 1.3em;
+    text-align: center;
+    color: #111;
+}
+
+.archive-title {
+    font-size: 32px;
+    margin-top: 60px;
+}
+
+.archive-item {
+    margin: 5px 0 15px;
+    padding: 0;
+    text-align: left;
+}
+
+.archive-item-date {
+    color: #ccc;
+    font-size: 14px;
+    padding: 5px 0;
+    margin-top: 5px;
+    display: block;
+}
+
+.archive-item-link {
+    display: inline-block;
+    text-decoration: none;
+    font-size: 21px;
+    font-family: 'Lato', Consolas, sans-serif;
+    font-weight: bold;
+    color: #222;
+    padding: 5px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.archive-item-link:hover {
+    border-bottom-color: #222;
+}
+
+.footer {
+    padding: 25px 0;
+    text-align: center;
+    font-family: 'Lato', Consolas, sans-serif;
+}
+
+.footer-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    color: #ccc;
+    font-size: 14px;
+}
+
+.footer-links li {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+}
+
+.footer-links a {
+    color: #888;
+    text-decoration: none;
+    transition: color 150ms ease;
+    margin: 0 15px;
+}
+
+.footer-links a:hover,
+.footer-links a:focus {
+    color: #222;
+}
+
+.footer-links li::before {
+    content: '/';
+    position: relative;
+    left: -2px;
+}
+
+.footer-links li:first-child::before {
+    display: none;
+}
+
+.footer-links-kudos img {
+    position: relative;
+    top: 6px;
+    margin-left: 2px;
+}
+
+@media (min-width: 600px) {
+    .header {
+        padding: 12px 0;
+    }
+    .nav-title-container {
+        flex: 1;
+        flex-direction: column;
+        display: flex;
+    }
+    .nav-logo img {
+        max-height: 50px;
+    }
+    .nav-links {
+        font-size: 18px;
+        flex: 1;
+    }
+    .nav-links li {
+        margin: 0 0 0 30px;
+    }
+    .content {
+        font-size: 17px;
+        line-height: 1.7;
+        margin: 100px auto;
+    }
+    .highlight {
+        font-size: 16px;
+        margin: 40px -20px;
+    }
+    .archive {
+        text-align: left;
+    }
+    .archive-title {
+        font-size: 38px;
+    }
+    .archive-item-date {
+        font-size: 19px;
+        text-align: right;
+        float: right;
+    }
+    .article-title {
+        font-size: 34px;
+    }
+    .article-duration {
+        font-size: 12px;
+    }
+    .footer-links {
+        font-size: inherit;
+    }
+}

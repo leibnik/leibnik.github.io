@@ -6,10 +6,21 @@
     <description>Recent content in Posts on nyakokishi&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Mon, 29 Jan 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 20 May 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="http://nyakokishi.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>容斥原理（一）</title>
+      <link>http://nyakokishi.github.io/2018/05/20/%E5%AE%B9%E6%96%A5%E5%8E%9F%E7%90%86%E4%B8%80/</link>
+      <pubDate>Sun, 20 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>http://nyakokishi.github.io/2018/05/20/%E5%AE%B9%E6%96%A5%E5%8E%9F%E7%90%86%E4%B8%80/</guid>
+      <description>quiz 不超过 999 的正整数中，3 或 5 的倍数的和是多少？  solve 效率低的做法就是依次枚举累加 3 或 5 的倍数来求解。
+[...Array(1000).keys()].reduce((sum,i) =&amp;gt; i % 3 === 0 || i % 5 === 0 ? sum + i : sum, 0);  处理这类问题，组合数学中有非常重要的一个计数公式——容斥原理（Inclusion–exclusion principle）。
+设 $S$ 是对象的有限集合，且 $P_1$ 和 $P_2$ 是每一个对象有或没有的两个性质。设 $A_1$ 是 $S$ 中具有 $P_1$ 性质的对象的集合，$A_2$ 是 $S$ 中具有 $P_2$ 性质的对象的集合。在计数 $S$ 中既不具有性质 $P_1$ 也不具有性质 $P_2$ 的对象的个数时，我们可以从集合 $S$ 中排除掉集合 $A_1$ 和集合 $A_2$，但由于重复排除了兼具有 $P_1$ 和 $P_2$ 性质的对象，所以还需补充上集合 $A_1$ 与 $A_2$ 相交的部分。于是有:</description>
+    </item>
     
     <item>
       <title>Generation of permutations and combinations</title>

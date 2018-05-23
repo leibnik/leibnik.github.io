@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Math on nyakokishi&#39;s blog</title>
-    <link>http://nyakokishi.github.io/tags/math/</link>
+    <link>https://nyakokishi.github.io/tags/math/</link>
     <description>Recent content in Math on nyakokishi&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Sun, 20 May 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="http://nyakokishi.github.io/tags/math/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://nyakokishi.github.io/tags/math/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>容斥原理（一）</title>
-      <link>http://nyakokishi.github.io/2018/05/20/%E5%AE%B9%E6%96%A5%E5%8E%9F%E7%90%86%E4%B8%80/</link>
+      <link>https://nyakokishi.github.io/2018/05/20/%E5%AE%B9%E6%96%A5%E5%8E%9F%E7%90%86%E4%B8%80/</link>
       <pubDate>Sun, 20 May 2018 00:00:00 +0000</pubDate>
       
-      <guid>http://nyakokishi.github.io/2018/05/20/%E5%AE%B9%E6%96%A5%E5%8E%9F%E7%90%86%E4%B8%80/</guid>
+      <guid>https://nyakokishi.github.io/2018/05/20/%E5%AE%B9%E6%96%A5%E5%8E%9F%E7%90%86%E4%B8%80/</guid>
       <description>quiz 不超过 999 的正整数中，3 或 5 的倍数的和是多少？  solve 效率低的做法就是依次枚举累加 3 或 5 的倍数来求解。
 [...Array(1000).keys()].reduce((sum,i) =&amp;gt; i % 3 === 0 || i % 5 === 0 ? sum + i : sum, 0);  处理这类问题，组合数学中有非常重要的一个计数公式——容斥原理（Inclusion–exclusion principle）。
 设 $S$ 是对象的有限集合，且 $P_1$ 和 $P_2$ 是每一个对象有或没有的两个性质。设 $A_1$ 是 $S$ 中具有 $P_1$ 性质的对象的集合，$A_2$ 是 $S$ 中具有 $P_2$ 性质的对象的集合。在计数 $S$ 中既不具有性质 $P_1$ 也不具有性质 $P_2$ 的对象的个数时，我们可以从集合 $S$ 中排除掉集合 $A_1$ 和集合 $A_2$，但由于重复排除了兼具有 $P_1$ 和 $P_2$ 性质的对象，所以还需补充上集合 $A_1$ 与 $A_2$ 相交的部分。于是有:</description>
@@ -24,10 +24,10 @@
     
     <item>
       <title>Generation of permutations and combinations</title>
-      <link>http://nyakokishi.github.io/2018/01/29/generation-of-permutations-and-combinations/</link>
+      <link>https://nyakokishi.github.io/2018/01/29/generation-of-permutations-and-combinations/</link>
       <pubDate>Mon, 29 Jan 2018 00:00:00 +0000</pubDate>
       
-      <guid>http://nyakokishi.github.io/2018/01/29/generation-of-permutations-and-combinations/</guid>
+      <guid>https://nyakokishi.github.io/2018/01/29/generation-of-permutations-and-combinations/</guid>
       <description>Ref Generation of Permutations by Adjacent Transposition
 Generation of Permutations by Transposition
 组合数学 chapter 4</description>
@@ -35,10 +35,10 @@ Generation of Permutations by Transposition
     
     <item>
       <title>一个叫 “拈” 的博弈游戏</title>
-      <link>http://nyakokishi.github.io/2017/12/19/%E4%B8%80%E4%B8%AA%E5%8F%AB-%E6%8B%88-%E7%9A%84%E5%8D%9A%E5%BC%88%E6%B8%B8%E6%88%8F/</link>
+      <link>https://nyakokishi.github.io/2017/12/19/%E4%B8%80%E4%B8%AA%E5%8F%AB-%E6%8B%88-%E7%9A%84%E5%8D%9A%E5%BC%88%E6%B8%B8%E6%88%8F/</link>
       <pubDate>Tue, 19 Dec 2017 00:00:00 +0000</pubDate>
       
-      <guid>http://nyakokishi.github.io/2017/12/19/%E4%B8%80%E4%B8%AA%E5%8F%AB-%E6%8B%88-%E7%9A%84%E5%8D%9A%E5%BC%88%E6%B8%B8%E6%88%8F/</guid>
+      <guid>https://nyakokishi.github.io/2017/12/19/%E4%B8%80%E4%B8%AA%E5%8F%AB-%E6%8B%88-%E7%9A%84%E5%8D%9A%E5%BC%88%E6%B8%B8%E6%88%8F/</guid>
       <description>前言 最近在公司活动中玩了一个博弈游戏，游戏规则比较简单，但其必胜策略却十分耐人寻味，游戏内容就是有三堆物件，数量分别为 $3, 5, 7$ 个，两位玩家轮流从这三堆物件中取物，每次取物只能在三堆物品中选择其中一堆并至少取走一个，可以直接一堆取完，当所有堆都取完时游戏随即结束并且最后取完的玩家判为输。 这个游戏其实是一个叫 Nim 博弈游戏的一种变种玩法，Nim 游戏通常的玩法如下:
  The normal game is between two players and played with three heaps of any number of objects. The two players alternate taking any number of objects from any single one of the heaps. The goal is to be the last to take an object. #wiki
  通常 Nim 游戏的获胜目标是争取成为最后一个取完的玩家，如果反着来，最后一个取完的玩家判为输，则是 Nim 游戏的一种变形，暂且称为 Anti-Nim (部分资料的说法)。
@@ -47,10 +47,10 @@ Generation of Permutations by Transposition
     
     <item>
       <title>Matrix in Android</title>
-      <link>http://nyakokishi.github.io/2016/01/12/matrix-in-android/</link>
+      <link>https://nyakokishi.github.io/2016/01/12/matrix-in-android/</link>
       <pubDate>Tue, 12 Jan 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://nyakokishi.github.io/2016/01/12/matrix-in-android/</guid>
+      <guid>https://nyakokishi.github.io/2016/01/12/matrix-in-android/</guid>
       <description>许多时候我们在数学课本上学到的多数都停留在知其然而不知其所以然的状态，比如学了线性代数有什么用，可能多数人都回答不上来。而对于程序员，要理解它可能从应用的角度出发把线性代数当作是一种人为设计的领域特定语言（ domain specific language ）可能更容易被他们所接受。具体参考：程序观点下的线性代数。
 本文只简单介绍（复习）矩阵的定义、矩阵的运算，以及在 android 中使用矩阵
 矩阵的定义  由 $m\times n$ 个数 $a_{ij}(i=1,2,\dots,m;j=1,2,\dots,n)$ 排成的 m 行 n 列的数表:

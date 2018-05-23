@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>翻译 on nyakokishi&#39;s blog</title>
-    <link>http://nyakokishi.github.io/tags/%E7%BF%BB%E8%AF%91/</link>
+    <link>https://nyakokishi.github.io/tags/%E7%BF%BB%E8%AF%91/</link>
     <description>Recent content in 翻译 on nyakokishi&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Sun, 21 Feb 2016 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="http://nyakokishi.github.io/tags/%E7%BF%BB%E8%AF%91/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://nyakokishi.github.io/tags/%E7%BF%BB%E8%AF%91/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Android Working with Recycler View</title>
-      <link>http://nyakokishi.github.io/2016/02/21/android-working-with-recycler-view/</link>
+      <link>https://nyakokishi.github.io/2016/02/21/android-working-with-recycler-view/</link>
       <pubDate>Sun, 21 Feb 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://nyakokishi.github.io/2016/02/21/android-working-with-recycler-view/</guid>
+      <guid>https://nyakokishi.github.io/2016/02/21/android-working-with-recycler-view/</guid>
       <description>原文：http://www.androidhive.info/2016/01/android-working-with-recycler-view/
 RecyclerView 是一个更高级版本的 ListView ，较后者有着性能的提升和其他的优点。同时使用 RecyclerView 和 CardView 来生成列表和表格都是非常简单的事情。这里 有关于 RecyclerView 和一些例子的完整介绍。
 在本次教程里，我们将学习如何结合自定义布局渲染出一个简单的 RecyclerView 。同时，我们将学习如何写出一个适配器类，以及为列表添加分割线，为列表项添加点击事件。 具体的，我们将把这个 RecyclerView 设计成呈现电影信息的列表，包括标题，类型，以及发行时间。
